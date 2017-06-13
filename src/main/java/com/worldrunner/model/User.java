@@ -3,6 +3,7 @@ package com.worldrunner.model;
 import java.io.Serializable;
 import java.util.Date;
 
+import javax.ws.rs.Produces;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;

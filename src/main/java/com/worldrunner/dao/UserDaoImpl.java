@@ -4,7 +4,8 @@ package com.worldrunner.dao;
  * Created by Vuta Alexandru on 6/7/2017.
  */
 
-import com.worldrunner.data.Database;
+import com.worldrunner.tools.CustomException;
+import com.worldrunner.tools.Database;
 import com.worldrunner.model.User;
 
 import java.sql.Connection;
@@ -21,10 +22,8 @@ public class UserDaoImpl implements UserDao {
     private List<User> users;
 
 
-    public UserDaoImpl() throws Exception {
-
+    public UserDaoImpl()  {
         users = new ArrayList<>();
-        connection = Database.getConnection();
 
     }
 
@@ -32,6 +31,7 @@ public class UserDaoImpl implements UserDao {
     @Override
     public List<User> findAll() throws Exception {
 
+        connection = Database.getConnection();
         // prepare  statement
         ps = connection.prepareStatement("SELECT * FROM user");
         queryAll(ps);
@@ -45,7 +45,7 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public User findById(Long id) throws Exception {
-
+        connection = Database.getConnection();
         // prepare  statement
         ps = connection.prepareStatement("SELECT * FROM user WHERE id =?");
         ps.setLong(1, id);
@@ -59,8 +59,8 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public void insertUser(User user) throws Exception {
-
+    public User insertUser(User user) throws Exception {
+        connection = Database.getConnection();
         // prepare  statement
         ps = connection.prepareStatement("INSERT INTO user (firstName, lastName, email, password, country, weight, height) VALUE (?, ?, ?, ?, ?, ?, ?)");
         ps.setString(1, user.getFirstname());
@@ -76,12 +76,14 @@ public class UserDaoImpl implements UserDao {
         ps.close();
         Database.close(connection);
 
+        return user;
     }
 
     // TODO: Method update user is not ready yet!!
     @Override
-    public void updateUser(User user) {
+    public User updateUser(User user) {
 
+        return user;
     }
 
     // TODO: Method delete user is not ready yet!!

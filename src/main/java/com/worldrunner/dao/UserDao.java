@@ -2,6 +2,7 @@ package com.worldrunner.dao;
 
 
 import com.worldrunner.model.User;
+import com.worldrunner.tools.CustomException;
 
 import java.util.List;
 
@@ -12,7 +13,7 @@ public interface UserDao {
 
     List<User> findAll() throws  Exception;
     User findById(Long id) throws  Exception;
-    void insertUser(User employee) throws  Exception;
-    void updateUser(User employee) throws  Exception;
+    User insertUser(User employee) throws Exception;
+    User updateUser(User employee) throws  Exception;
     void deleteUser(User employee) throws  Exception;
 }

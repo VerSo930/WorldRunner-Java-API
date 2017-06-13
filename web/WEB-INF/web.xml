@@ -4,7 +4,7 @@
 http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"
          version="2.4">
 
-    <display-name>Archetype Created Web Application</display-name>
+    <display-name>WorldRunner REST API</display-name>
     <!-- Auto scan REST service -->
     <context-param>
         <param-name>resteasy.scan</param-name>
@@ -15,20 +15,12 @@ http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"
     <servlet>
         <servlet-name>resteasy-servlet</servlet-name>
         <servlet-class>org.jboss.resteasy.plugins.server.servlet.HttpServletDispatcher</servlet-class>
-
         <init-param>
             <param-name>com.sun.jersey.api.json.POJOMappingFeature</param-name>
             <param-value>true</param-value>
         </init-param>
-
         <load-on-startup>1</load-on-startup>
     </servlet>
-
-    <resource-env-ref>
-        <resource-env-ref-name>jdbc/springTest</resource-env-ref-name>
-        <resource-env-ref-type>javax.sql.DataSource</resource-env-ref-type>
-    </resource-env-ref>
-
 
     <servlet-mapping>
         <servlet-name>resteasy-servlet</servlet-name>

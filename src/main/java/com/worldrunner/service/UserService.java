@@ -8,78 +8,144 @@ import javax.ws.rs.core.Response;
 
 
 import com.sun.istack.NotNull;
-import com.worldrunner.Constants;
+import com.worldrunner.Cnst;
 import com.worldrunner.dao.UserDaoImpl;
 import com.worldrunner.model.MyResponse;
 import com.worldrunner.model.User;
+import com.worldrunner.tools.ServiceTools;
 
-@Path(Constants.API_URL)
+import java.util.List;
+
+@Path(Cnst.API_URL)
 public class UserService {
+
+    private Response.ResponseBuilder rb;
+    private UserDaoImpl dao;
 
     @PermitAll
     @GET
-    @Path(Constants.ENDPOINT_USERS + "/{id}")
-    @Produces(Constants.CONTENT_TYPE)
+    @Path(Cnst.ENDPOINT_USERS + "/{id}")
+    @Produces(Cnst.CONTENT_TYPE)
     public Response getUserById(@PathParam("id") int id, @Context Request req) {
 
         MyResponse<User> resp = new MyResponse<>();
-        UserDaoImpl dao = null;
 
         try {
+
+            // Create DAO, get user by id, create response Object
             dao = new UserDaoImpl();
             resp.setObj(dao.findById((long) id));
+            resp.setCode(Cnst.C_REQ_OK);
+            resp.setMessage(Cnst.MSG_FIND_BY_ID);
+            resp.setStatus(Cnst.SUCCESS);
+
         } catch (Exception e) {
-            e.printStackTrace();
+
+            // Catch error, dysplay error code and message from Exception
+            resp.setCode(Cnst.C_ERROR);
+            resp.setMessage(e.getMessage());
+            resp.setStatus(Cnst.FAIL);
         }
 
-        Response.ResponseBuilder rb = Response.ok(resp);
-        return rb.build();
+        // build response
+        rb = Response.ok(resp);
+        return rb.status(resp.getCode()).build();
     }
 
     @PermitAll
     @GET
-    @Path(Constants.ENDPOINT_USERS)
-    @Produces(Constants.CONTENT_TYPE)
-    public Response getUser(@Context Request req) {
+    @Path(Cnst.ENDPOINT_USERS)
+    @Produces(Cnst.CONTENT_TYPE)
+    public Response getAllUsers(@Context Request req) throws Exception {
 
-        MyResponse resp = new MyResponse();
-        UserDaoImpl user = null;
+        MyResponse<List<User>> resp = new MyResponse<>();
 
         try {
-            user = new UserDaoImpl();
-            resp.setObj(user.findAll());
+
+            // Create DAO, get user by id, create response Object
+            dao = new UserDaoImpl();
+            resp.setObj(dao.findAll());
+            resp.setCode(Cnst.C_REQ_OK);
+            resp.setMessage(Cnst.MSG_FIND_ALL);
+            resp.setStatus(Cnst.SUCCESS);
+
         } catch (Exception e) {
-            e.printStackTrace();
+
+            // Catch error, dysplay error code and message from Exception
+            resp.setCode(Cnst.C_ERROR);
+            resp.setMessage(e.getMessage());
+            resp.setStatus(Cnst.FAIL);
         }
 
-        Response.ResponseBuilder rb = Response.ok(resp);
-        return rb.build();
+        // build response
+        rb = Response.ok(resp);
+        return rb.status(resp.getCode()).build();
+    }
+
+
+    @PermitAll
+    @POST
+    @Path(Cnst.ENDPOINT_USERS)
+    @Produces(Cnst.CONTENT_TYPE)
+    @Consumes(Cnst.CONTENT_TYPE)
+    public Response insertUser(User user) throws Exception {
+
+        MyResponse<User> resp = new MyResponse<>();
+
+        try {
+
+            // Check for empty & null params
+            ServiceTools.checkUser(user);
+            // Create DAO, get user by id, create response Object
+            dao = new UserDaoImpl();
+            resp.setObj(dao.insertUser(user));
+            resp.setCode(Cnst.C_REQ_OK);
+            resp.setMessage(Cnst.MSG_FIND_ALL);
+            resp.setStatus(Cnst.SUCCESS);
+
+        } catch (Exception e) {
+
+            // Catch error, dysplay error code and message from Exception
+            resp.setCode(Cnst.C_ERROR);
+            resp.setMessage(e.getMessage());
+            resp.setStatus(Cnst.FAIL);
+        }
+
+        // build response
+        rb = Response.ok(resp);
+        return rb.status(resp.getCode()).build();
     }
 
     // TODO: Method not working: write it?
     @PermitAll
     @PUT
-    @Path(Constants.ENDPOINT_USERS)
-    @Produces(Constants.CONTENT_TYPE)
+    @Path(Cnst.ENDPOINT_USERS)
+    @Produces(Cnst.CONTENT_TYPE)
+    @Consumes(Cnst.CONTENT_TYPE)
     public Response updateUserById(@NotNull User user) {
 
-        MyResponse resp = new MyResponse();
-        Response.ResponseBuilder rb;
-        resp.setObj(user);
+        MyResponse<User> resp = new MyResponse<>();
 
-        if (resp.checkUser()) {
-            UserDaoImpl daoOp = null;
-            try {
-                daoOp = new UserDaoImpl();
-                daoOp.insertUser(user);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+        try {
 
+            // Create DAO, get user by id, create response Object
+            dao = new UserDaoImpl();
+            resp.setObj( dao.updateUser(user) );
+            resp.setCode(Cnst.C_REQ_OK);
+            resp.setMessage(Cnst.MSG_UPDATE_USER);
+            resp.setStatus(Cnst.SUCCESS);
+
+        } catch (Exception e) {
+
+            // Catch error, dysplay error code and message from Exception
+            resp.setCode(Cnst.C_ERROR);
+            resp.setMessage(e.getMessage());
+            resp.setStatus(Cnst.FAIL);
         }
 
-        rb = Response.status(resp.getCode()).entity(resp);
-        return rb.build();
+        // build response
+        rb = Response.ok(resp);
+        return rb.status(resp.getCode()).build();
     }
 
 

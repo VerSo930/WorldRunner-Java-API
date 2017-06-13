@@ -1,4 +1,4 @@
-package com.worldrunner.data;
+package com.worldrunner.tools;
 
 /**
  * Created by Vuta Alexandru on 6/7/2017.

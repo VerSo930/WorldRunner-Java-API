@@ -4,10 +4,10 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.howtodoinjava.app</groupId>
-    <artifactId>RESTEasyEtagDemo</artifactId>
+    <artifactId>WorldRunner</artifactId>
     <packaging>war</packaging>
     <version>1.0-SNAPSHOT</version>
-    <name>RESTEasyEtagDemo Maven Webapp</name>
+    <name>World Runner REST API</name>
     <url>http://maven.apache.org</url>
 
     <repositories>
@@ -63,7 +63,7 @@
 
     </dependencies>
     <build>
-        <finalName>RESTEasyEtagDemo</finalName>
+        <finalName>WorldRunner</finalName>
         <plugins>
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
