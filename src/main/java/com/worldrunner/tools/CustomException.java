@@ -1,11 +1,17 @@
 package com.worldrunner.tools;
 
+import java.sql.SQLException;
+
 /**
  * Created by Vuta Alexandru on 6/13/2017.
  */
 public class CustomException extends Exception {
 
     private int code;
+
+    public CustomException(String message, Throwable cause) {
+        super(message, cause);
+    }
 
     public CustomException(String message, int code) {
         super(message);

@@ -3,32 +3,35 @@ package com.worldrunner.tools;
 /**
  * Created by Vuta Alexandru on 6/7/2017.
  */
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.servlet.ServletContextEvent;
+import javax.servlet.ServletContextListener;
+import javax.sql.DataSource;
 import java.sql.*;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 
-public class Database {
+public class Database  {
+    private static Connection conn;
 
-    // TODO: Implement pool connection for mysql
-    public static Connection getConnection() throws Exception
+    public static Connection getConnection() throws CustomException
     {
-        Connection conn = null;
-        try {
-            // Register JDBC driver
-            Class.forName("org.mariadb.jdbc.Driver");
-            conn = DriverManager.getConnection(
-                    "jdbc:mariadb://vuta-alexandru.com/spring_test", "root", "vuta91929394");
-            System.out.println("MYSQL =>> Connected database successfully...");
-            return conn;
-        } catch (SQLException se) {
-            //Handle errors for JDBC
-            se.printStackTrace();
-        } catch (Exception e) {
-            //Handle errors for Class.forName
-            e.printStackTrace();
-        }
-        return null;
+           try {
+
+               Context initContext = new InitialContext();
+               Context envContext  = (Context)initContext.lookup("java:/comp/env");
+               DataSource datasource = (DataSource)envContext.lookup("jdbc/LocalTestDB");
+
+               conn = datasource.getConnection();
+
+           } catch (Exception e) {
+             throw new CustomException(e.getMessage(), 500);
+           }
+
+           return conn;
+
     }
 
     public static void close(Connection connection)
@@ -42,5 +45,6 @@ public class Database {
             e.printStackTrace();
         }
     }
+
 
 }

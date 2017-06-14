@@ -6,15 +6,16 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
 
-
 import com.sun.istack.NotNull;
 import com.worldrunner.Cnst;
 import com.worldrunner.dao.UserDaoImpl;
 import com.worldrunner.model.MyResponse;
 import com.worldrunner.model.User;
+import com.worldrunner.tools.CustomException;
 import com.worldrunner.tools.ServiceTools;
 
 import java.util.List;
+
 
 @Path(Cnst.API_URL)
 public class UserService {
@@ -34,15 +35,15 @@ public class UserService {
 
             // Create DAO, get user by id, create response Object
             dao = new UserDaoImpl();
-            resp.setObj(dao.findById((long) id));
+            resp.setData(dao.findById((long) id));
             resp.setCode(Cnst.C_REQ_OK);
             resp.setMessage(Cnst.MSG_FIND_BY_ID);
             resp.setStatus(Cnst.SUCCESS);
 
-        } catch (Exception e) {
+        } catch (CustomException e) {
 
             // Catch error, dysplay error code and message from Exception
-            resp.setCode(Cnst.C_ERROR);
+            resp.setCode(e.getCode());
             resp.setMessage(e.getMessage());
             resp.setStatus(Cnst.FAIL);
         }
@@ -51,6 +52,7 @@ public class UserService {
         rb = Response.ok(resp);
         return rb.status(resp.getCode()).build();
     }
+
 
     @PermitAll
     @GET
@@ -64,7 +66,7 @@ public class UserService {
 
             // Create DAO, get user by id, create response Object
             dao = new UserDaoImpl();
-            resp.setObj(dao.findAll());
+            resp.setData(dao.findAll());
             resp.setCode(Cnst.C_REQ_OK);
             resp.setMessage(Cnst.MSG_FIND_ALL);
             resp.setStatus(Cnst.SUCCESS);
@@ -98,7 +100,7 @@ public class UserService {
             ServiceTools.checkUser(user);
             // Create DAO, get user by id, create response Object
             dao = new UserDaoImpl();
-            resp.setObj(dao.insertUser(user));
+            resp.setData(dao.insertUser(user));
             resp.setCode(Cnst.C_REQ_OK);
             resp.setMessage(Cnst.MSG_FIND_ALL);
             resp.setStatus(Cnst.SUCCESS);
@@ -130,7 +132,7 @@ public class UserService {
 
             // Create DAO, get user by id, create response Object
             dao = new UserDaoImpl();
-            resp.setObj( dao.updateUser(user) );
+            resp.setData( dao.updateUser(user) );
             resp.setCode(Cnst.C_REQ_OK);
             resp.setMessage(Cnst.MSG_UPDATE_USER);
             resp.setStatus(Cnst.SUCCESS);
@@ -147,6 +149,7 @@ public class UserService {
         rb = Response.ok(resp);
         return rb.status(resp.getCode()).build();
     }
+
 
 
 }

@@ -21,8 +21,7 @@ public class UserDaoImpl implements UserDao {
     private PreparedStatement ps;
     private List<User> users;
 
-
-    public UserDaoImpl()  {
+    public UserDaoImpl() {
         users = new ArrayList<>();
 
     }
@@ -44,18 +43,31 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public User findById(Long id) throws Exception {
-        connection = Database.getConnection();
-        // prepare  statement
-        ps = connection.prepareStatement("SELECT * FROM user WHERE id =?");
-        ps.setLong(1, id);
-        queryAll(ps);
+    public User findById(Long id) throws CustomException {
+        try {
 
-        // Close statement/connection
-        ps.close();
-        Database.close(connection);
 
-        return (users == null) ? null : users.get(0);
+            connection = Database.getConnection();
+            // prepare  statement
+            ps = connection.prepareStatement("SELECT * FROM user WHERE id =?");
+            ps.setLong(1, id);
+            queryAll(ps);
+            ps.close();
+
+        } catch (Exception e) {
+
+            throw  new CustomException(e.getMessage(), 500);
+
+        } finally {
+            // Close connection
+            //Database.close(connection);
+        }
+
+        if (users.size() == 1) {
+            return users.get(0);
+        } else {
+            throw new CustomException("user don't exist in database", 400) ;
+        }
     }
 
     @Override

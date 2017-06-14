@@ -1,8 +1,5 @@
 package com.worldrunner.model;
 
-import javax.ws.rs.Produces;
-import javax.xml.bind.annotation.XmlRootElement;
-
 /**
  * Created by vuta on 09/06/2017.
  */
@@ -12,7 +9,7 @@ public class MyResponse<T> {
     private String status;
     private String message;
     private String error;
-    private T obj;
+    private T data;
     private int code;
 
     public int getCode() {
@@ -25,12 +22,12 @@ public class MyResponse<T> {
 
     public MyResponse() {}
 
-    public T getObj() {
-        return obj;
+    public T getData() {
+        return data;
     }
 
-    public void setObj(T obj) {
-        this.obj = obj;
+    public void setData(T data) {
+        this.data = data;
     }
 
     public String getStatus() {

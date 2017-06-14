@@ -14,9 +14,15 @@ import java.util.concurrent.Callable;
  */
 public class ServiceTools {
 
-    public static void checkUser(User u) throws Exception {
+    public static void checkUser(User u) throws CustomException {
         if(em(u.getEmail()) || em(u.getFirstname()) || em(u.getLastname()) || em(u.getPassword()))
-            throw  new  Exception("user parameters not set or empty");
+            throw  new  CustomException("user parameters not set or empty", 400);
+    }
+
+    public  static void checkId(Object id) throws CustomException {
+        if((Object)(id).getClass() != Integer.class) {
+            throw  new  CustomException("user parameters not set or empty", 400);
+        }
     }
 
     private static boolean em( final String s ) {
