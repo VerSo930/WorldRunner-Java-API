@@ -1,10 +1,13 @@
 package com.worldrunner.service;
 
 import javax.annotation.security.PermitAll;
+import javax.persistence.EntityNotFoundException;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.ext.ExceptionMapper;
+import javax.ws.rs.ext.Provider;
 
 import com.sun.istack.NotNull;
 import com.worldrunner.Cnst;
@@ -42,10 +45,11 @@ public class UserService {
 
         } catch (CustomException e) {
 
-            // Catch error, dysplay error code and message from Exception
+            // Catch error, display error code and message from Exception
             resp.setCode(e.getCode());
             resp.setMessage(e.getMessage());
             resp.setStatus(Cnst.FAIL);
+            resp.setError(2500);
         }
 
         // build response
@@ -73,10 +77,11 @@ public class UserService {
 
         } catch (Exception e) {
 
-            // Catch error, dysplay error code and message from Exception
+            // Catch error, display error code and message from Exception
             resp.setCode(Cnst.C_ERROR);
             resp.setMessage(e.getMessage());
             resp.setStatus(Cnst.FAIL);
+            resp.setError(2500);
         }
 
         // build response
@@ -107,10 +112,11 @@ public class UserService {
 
         } catch (Exception e) {
 
-            // Catch error, dysplay error code and message from Exception
+            // Catch error, display error code and message from Exception
             resp.setCode(Cnst.C_ERROR);
             resp.setMessage(e.getMessage());
             resp.setStatus(Cnst.FAIL);
+            resp.setError(2500);
         }
 
         // build response
@@ -129,6 +135,8 @@ public class UserService {
         MyResponse<User> resp = new MyResponse<>();
 
         try {
+            // Check parameters
+            ServiceTools.checkUser(user);
 
             // Create DAO, get user by id, create response Object
             dao = new UserDaoImpl();
@@ -137,18 +145,57 @@ public class UserService {
             resp.setMessage(Cnst.MSG_UPDATE_USER);
             resp.setStatus(Cnst.SUCCESS);
 
-        } catch (Exception e) {
+        } catch (CustomException e) {
 
-            // Catch error, dysplay error code and message from Exception
-            resp.setCode(Cnst.C_ERROR);
+            // Catch error, display error code and message from Exception
+            resp.setCode(e.getCode());
             resp.setMessage(e.getMessage());
             resp.setStatus(Cnst.FAIL);
+            resp.setError(2500);
         }
 
         // build response
         rb = Response.ok(resp);
         return rb.status(resp.getCode()).build();
     }
+
+
+    @PermitAll
+    @DELETE
+    @Path(Cnst.ENDPOINT_USERS)
+    @Produces(Cnst.CONTENT_TYPE)
+    @Consumes(Cnst.CONTENT_TYPE)
+    public Response deleteUser(@NotNull User user) {
+
+        MyResponse<User> resp = new MyResponse<>();
+
+        try {
+            // Check parameters
+           // ServiceTools.checkUser(user);
+            System.out.println(user.toString());
+
+            // Create DAO, get user by id, create response Object
+            dao = new UserDaoImpl();
+            dao.deleteUser(user);
+            resp.setData(null);
+            resp.setCode(Cnst.C_REQ_OK);
+            resp.setMessage(Cnst.MSG_DELETE_USER);
+            resp.setStatus(Cnst.SUCCESS);
+
+        } catch (CustomException e) {
+
+            // Catch error, display error code and message from Exception
+            resp.setCode(e.getCode());
+            resp.setMessage(e.getMessage());
+            resp.setStatus(Cnst.FAIL);
+            resp.setError(2500);
+        }
+
+        // build response
+        rb = Response.ok(resp);
+        return rb.status(resp.getCode()).build();
+    }
+
 
 
 

@@ -15,7 +15,10 @@ import java.util.concurrent.Callable;
 public class ServiceTools {
 
     public static void checkUser(User u) throws CustomException {
-        if(em(u.getEmail()) || em(u.getFirstname()) || em(u.getLastname()) || em(u.getPassword()))
+        if(em(u.getEmail()) || em(u.getFirstname()) || em(u.getLastname()) || em(u.getPassword()) || u.getEmail().length() < Cnst.EMAIL_MIN ||
+                u.getEmail().length() > Cnst.EMAIL_MAX || u.getFirstname().length() < Cnst.FIRST_NAME_MIN || u.getFirstname().length() > Cnst.FIRST_NAME_MAX
+                || u.getLastname().length() < Cnst.LAST_NAME_MIN  || u.getLastname().length() > Cnst.LAST_NAME_MAX || u.getPassword().length() < Cnst.PASSWORD_MIN
+                || u.getPassword().length() > Cnst.PASSWORD_MAX)
             throw  new  CustomException("user parameters not set or empty", 400);
     }
 

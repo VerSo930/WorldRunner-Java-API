@@ -14,11 +14,11 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 
 public class Database  {
-    private static Connection conn;
 
     public static Connection getConnection() throws CustomException
     {
-           try {
+        Connection conn;
+        try {
 
                Context initContext = new InitialContext();
                Context envContext  = (Context)initContext.lookup("java:/comp/env");

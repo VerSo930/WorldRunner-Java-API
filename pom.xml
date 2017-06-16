@@ -21,13 +21,19 @@
         <dependency>
             <groupId>org.jboss.resteasy</groupId>
             <artifactId>resteasy-jaxrs</artifactId>
-            <version>2.3.1.GA</version>
+            <version>3.0.4.Final</version>
         </dependency>
+        <dependency>
+            <groupId>org.jboss.resteasy</groupId>
+            <artifactId>resteasy-jackson-provider</artifactId>
+            <version>3.0.4.Final</version>
+        </dependency>
+
         <!-- JAXB support -->
         <dependency>
             <groupId>org.jboss.resteasy</groupId>
             <artifactId>resteasy-jaxb-provider</artifactId>
-            <version>2.3.1.GA</version>
+            <version>3.0.16.Final</version>
         </dependency>
         <dependency>
             <groupId>net.sf.scannotation</groupId>

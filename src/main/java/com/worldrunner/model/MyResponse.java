@@ -8,7 +8,7 @@ public class MyResponse<T> {
 
     private String status;
     private String message;
-    private String error;
+    private int error;
     private T data;
     private int code;
 
@@ -46,11 +46,11 @@ public class MyResponse<T> {
         this.message = message;
     }
 
-    public String getError() {
+    public int getError() {
         return error;
     }
 
-    public void setError(String error) {
+    public void setError(int error) {
         this.error = error;
     }
 

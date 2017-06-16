@@ -1,6 +1,5 @@
 package com.worldrunner.tools;
 
-import java.sql.SQLException;
 
 /**
  * Created by Vuta Alexandru on 6/13/2017.
