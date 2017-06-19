@@ -1,13 +1,11 @@
 package com.worldrunner.service;
 
 import javax.annotation.security.PermitAll;
-import javax.persistence.EntityNotFoundException;
+
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.ext.ExceptionMapper;
-import javax.ws.rs.ext.Provider;
 
 import com.sun.istack.NotNull;
 import com.worldrunner.Cnst;

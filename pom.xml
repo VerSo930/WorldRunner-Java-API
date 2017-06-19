@@ -29,6 +29,12 @@
             <version>3.0.4.Final</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.glassfish.jersey.media</groupId>
+            <artifactId>jersey-media-json-jackson</artifactId>
+
+        </dependency>
+
         <!-- JAXB support -->
         <dependency>
             <groupId>org.jboss.resteasy</groupId>

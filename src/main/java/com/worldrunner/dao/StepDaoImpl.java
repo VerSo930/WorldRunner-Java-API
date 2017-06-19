@@ -1,15 +1,16 @@
 package com.worldrunner.dao;
 
 import com.worldrunner.Cnst;
-import com.worldrunner.model.Step;
+import com.worldrunner.model.step.Day;
+import com.worldrunner.model.step.MyResponseStep;
+import com.worldrunner.model.step.Step;
 import com.worldrunner.model.User;
 import com.worldrunner.tools.CustomException;
 import com.worldrunner.tools.Database;
 import com.worldrunner.tools.Helper;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
+import java.sql.*;
+import java.sql.Date;
 import java.util.*;
 
 /**
@@ -20,14 +21,14 @@ public class StepDaoImpl implements StepDao {
     private static Connection connection;
     private PreparedStatement ps;
     private List<Step> steps;
-    HashMap<User, List<Step>> userListHashMap2 = new HashMap<>();
+    HashMap<User, HashMap<Integer, List<Integer>>> stepsList = new HashMap<>();
 
     public StepDaoImpl() {
         this.steps = new ArrayList<Step>();
     }
 
     @Override
-    public HashMap<User, List<Step>> findById(int id, int page, int limit) throws Exception {
+    public HashMap<User, HashMap<Integer, List<Integer>>> findById(int id, int page, int limit) throws Exception {
         try {
             connection = Database.getConnection();
             // prepare  statement
@@ -41,13 +42,13 @@ public class StepDaoImpl implements StepDao {
             Database.close(connection);
         }
 
-        return userListHashMap2;
+        return stepsList;
     }
 
 
     @Override
     public List<Step> findByDate(String datetime, int page, int limit) throws Exception {
-        if(Objects.equals(datetime, "24")) {
+        if (Objects.equals(datetime, "24")) {
             try {
                 connection = Database.getConnection();
                 // prepare  statement
@@ -84,52 +85,59 @@ public class StepDaoImpl implements StepDao {
     private void queryAll() throws CustomException {
 
         ResultSet rs;
-        Helper helper =  new Helper();
+        Helper helper = new Helper();
+        int day = 0;
+        int lastday = 0;
+
+        User user = new User();
+        HashMap<Integer, List<Integer>> listDay = new HashMap<>();
+        List<Integer> listSteps = new ArrayList<>();
+        //Map<java.sql.Date, List<Day>> dayList = new HashMap<>();
+
 
         try {
 
             rs = ps.executeQuery();
-            Integer lastday = null;
-            Integer day;
-            Integer userId = 0;
-            Double distance = 0D;
-
-            User user = new User();
-
-            HashMap<User, List<Step>> userListHashMap = new HashMap<>();
-
-            Step stepObj = new Step();
-            List<Step>  stepObjlist = new ArrayList<>();
-            List<Integer> steps24List = new ArrayList<>();
-
 
             // Get all steps from database
             while (rs.next()) {
-
-                userId = rs.getInt("userId");
-                user.setId(userId);
-
-                // initialize helper and get day of timestamp from mysql row
                 helper.init(rs);
                 day = helper.getStepDay();
+                // set user id
+                user.setId(rs.getInt("userId"));
 
 
-                if (Objects.equals(lastday, day)) {
-                    stepObj.addSteps(rs.getInt("steps"));
+                if (stepsList.get(user) != null) {
+                    // if list of steps-days exist for this user, get it
+                    listDay = stepsList.get(user);
+
+                    if (listDay.get(rs.getDate("hour")) != null) {
+                        // if list steps for this day exist, get it
+                        listSteps = listDay.get(day);
+                        listSteps.add(rs.getInt("steps"));
+                        listDay.put(day, listSteps);
+                    } else {
+                        // if list steps for this date don't exist, create it
+                        listSteps = new ArrayList<>();
+                        listSteps.add(rs.getInt("steps"));
+                        listDay.put(day, listSteps);
+                    }
+
+                    listDay.put(day, listSteps);
+
+                } else {
+                    // if list of steps-days don't exist for this user, create it
+                    listDay = new HashMap<>();
+                    // if list steps for this date don't exist, create it
+                    listSteps = new ArrayList<>();
+                    listSteps.add(rs.getInt("steps"));
+                    listDay.put(day, listSteps);
+
                 }
-
-                if (!Objects.equals(lastday, day)) {
-                    stepObj = new Step();
-                    stepObj.setDay(rs.getTimestamp("hour"));
-                    stepObjlist.add(stepObj);
-
-                }
-
-                // Reset last day
+                stepsList.put(user, listDay);
                 lastday = day;
-                userListHashMap.put(user, stepObjlist);
             }
-            userListHashMap2 = userListHashMap;
+
             // Close statement/connection
             ps.close();
         } catch (Exception e) {
@@ -138,7 +146,6 @@ public class StepDaoImpl implements StepDao {
         } finally {
             Database.close(connection);
         }
-
 
 
     }

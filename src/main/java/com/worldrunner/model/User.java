@@ -1,11 +1,15 @@
 package com.worldrunner.model;
 
+import com.worldrunner.model.step.Day;
+import com.worldrunner.model.step.Step;
 import jdk.nashorn.internal.objects.annotations.Getter;
 import jdk.nashorn.internal.objects.annotations.Setter;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.ws.rs.Produces;
@@ -28,10 +32,12 @@ public class User implements Serializable  {
     private Long weight;
     private String createdat;
 
+
     public User() {
         this.weight = 0L;
         this.height = 0L;
     }
+
 
     public String getCreatedat() {
         return createdat;
@@ -105,10 +111,10 @@ public class User implements Serializable  {
         this.weight = weight;
     }
 
-    @Override
+   /* @Override
     public String toString() {
         return this.id +" : "+ this.firstname + " / " + this.lastname + " / " + this.email + " / " + this.password;
-    }
+    }*/
 
     @Override
     public boolean equals(Object o) {

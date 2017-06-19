@@ -39,7 +39,7 @@ public class Cnst {
 
     // Step Mysql Query's SELECT * FROM `step` WHERE hour >= CURDATE();
     public static final String SQL_STEP_SELECT_24 = "SELECT * FROM step WHERE userid = ?";
-    public static final String SQL_FINDALL_STEP = "SELECT * FROM step";
+    public static final String SQL_FINDALL_STEP = "SELECT * FROM step ORDER BY hour DESC";
     // User parameters min, max lenght
     public static final int FIRST_NAME_MAX = 50;
     public static final int FIRST_NAME_MIN = 1;
