@@ -38,9 +38,15 @@ public class Cnst {
     public static final String SQL_DELETE_USER = "DELETE FROM user WHERE id = ?";
 
     // Step Mysql Query's SELECT * FROM `step` WHERE hour >= CURDATE();
-    public static final String SQL_STEP_SELECT_24 = "SELECT * FROM step WHERE userid = ?";
-    public static final String SQL_FINDALL_STEP = "SELECT * FROM step";
-    // User parameters min, max lenght
+    public static final String SQL_FIND_BY_ID_STEPS = "SELECT * FROM step WHERE userid = ?";
+    private static final int FIND_ALL_STEPS_DAYS = 1;
+    public static final String SQL_FINDALL_STEP = " SELECT id, hour, steps, userId" +
+            " FROM step t" +
+            " WHERE DATE(hour) > DATE( DATE_SUB( (SELECT MAX(hour) FROM step where userId = t.userId), INTERVAL "+ FIND_ALL_STEPS_DAYS +" DAY) )" +
+            " order by hour, userId desc";
+
+
+    // User conditions Settings
     public static final int FIRST_NAME_MAX = 50;
     public static final int FIRST_NAME_MIN = 1;
     public static final int LAST_NAME_MAX = 50;
@@ -49,6 +55,7 @@ public class Cnst {
     public static final int EMAIL_MIN = 3;
     public static final int PASSWORD_MAX = 20;
     public static final int PASSWORD_MIN = 6;
+
 
 
 

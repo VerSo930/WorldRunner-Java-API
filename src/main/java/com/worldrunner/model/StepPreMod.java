@@ -1,5 +1,7 @@
 package com.worldrunner.model;
 
+import com.worldrunner.model.step.Step;
+
 import java.util.List;
 
 /**

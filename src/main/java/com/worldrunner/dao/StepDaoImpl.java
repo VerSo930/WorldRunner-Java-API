@@ -1,15 +1,14 @@
 package com.worldrunner.dao;
 
 import com.worldrunner.Cnst;
-import com.worldrunner.model.Step;
+import com.worldrunner.model.step.Day;
+import com.worldrunner.model.step.Step;
 import com.worldrunner.model.User;
 import com.worldrunner.tools.CustomException;
 import com.worldrunner.tools.Database;
 import com.worldrunner.tools.Helper;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
+import java.sql.*;
 import java.util.*;
 
 /**
@@ -19,15 +18,36 @@ public class StepDaoImpl implements StepDao {
 
     private static Connection connection;
     private PreparedStatement ps;
-    private List<Step> steps;
-    HashMap<User, List<Step>> userListHashMap2 = new HashMap<>();
+    private List<Step> Gsteps;
+    private Step Gstep = new Step();
+    private List<Step> GlistStep = new ArrayList<>();
 
     public StepDaoImpl() {
-        this.steps = new ArrayList<Step>();
+        this.Gsteps = new ArrayList<Step>();
     }
 
     @Override
-    public HashMap<User, List<Step>> findById(int id, int page, int limit) throws Exception {
+    public Step findById(int id, int page, int limit) throws CustomException {
+
+        try {
+            connection = Database.getConnection();
+            // prepare  statement
+            ps = connection.prepareStatement(Cnst.SQL_FIND_BY_ID_STEPS);
+            ps.setInt(1,id);
+            queryById();
+            ps.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new CustomException(e.getMessage(), 500);
+        } finally {
+            Database.close(connection);
+        }
+
+        return Gstep;
+    }
+
+    @Override
+    public List<Step> findAll(int page, int limit) throws CustomException {
         try {
             connection = Database.getConnection();
             // prepare  statement
@@ -41,7 +61,7 @@ public class StepDaoImpl implements StepDao {
             Database.close(connection);
         }
 
-        return userListHashMap2;
+        return GlistStep;
     }
 
 
@@ -63,12 +83,15 @@ public class StepDaoImpl implements StepDao {
                 Database.close(connection);
             }
         }
-        return this.steps;
+        return this.Gsteps;
     }
 
     @Override
     public User insertStep(Step step) throws Exception {
-        return null;
+        connection.setAutoCommit(false);
+        ps = connection.prepareStatement("START TRANSACTION;");
+        ps.executeUpdate();
+
     }
 
     @Override
@@ -81,7 +104,7 @@ public class StepDaoImpl implements StepDao {
 
     }
 
-    private void queryAll() throws CustomException {
+    private void queryById() throws CustomException {
 
         ResultSet rs;
         Helper helper =  new Helper();
@@ -89,48 +112,29 @@ public class StepDaoImpl implements StepDao {
         try {
 
             rs = ps.executeQuery();
-            Integer lastday = null;
-            Integer day;
-            Integer userId = 0;
-            Double distance = 0D;
-
-            User user = new User();
-
-            HashMap<User, List<Step>> userListHashMap = new HashMap<>();
-
-            Step stepObj = new Step();
-            List<Step>  stepObjlist = new ArrayList<>();
-            List<Integer> steps24List = new ArrayList<>();
-
+            Day day;
+            int userId;
 
             // Get all steps from database
             while (rs.next()) {
+                if(Gstep == null) {
+                    Gstep = new Step();
+                    Gstep.setUserId(rs.getInt("userId"));
+                }
 
-                userId = rs.getInt("userId");
-                user.setId(userId);
-
-                // initialize helper and get day of timestamp from mysql row
+                // init helper
                 helper.init(rs);
-                day = helper.getStepDay();
 
+                // set objects values
+                day = new Day();
+                day.setDate(rs.getDate("hour").toString());
 
-                if (Objects.equals(lastday, day)) {
-                    stepObj.addSteps(rs.getInt("steps"));
-                }
+                // add steps to specific date, specific
+                Gstep.getDay(day).addStepsToList(rs.getInt("steps"), helper.getHourFromDate());
 
-                if (!Objects.equals(lastday, day)) {
-                    stepObj = new Step();
-                    stepObj.setDay(rs.getTimestamp("hour"));
-                    stepObjlist.add(stepObj);
-
-                }
-
-                // Reset last day
-                lastday = day;
-                userListHashMap.put(user, stepObjlist);
             }
-            userListHashMap2 = userListHashMap;
-            // Close statement/connection
+
+            // Close statement
             ps.close();
         } catch (Exception e) {
             e.printStackTrace();
@@ -139,6 +143,93 @@ public class StepDaoImpl implements StepDao {
             Database.close(connection);
         }
 
+
+
+    }
+
+    private void queryAll() throws CustomException {
+
+        ResultSet rs;
+        Helper helper =  new Helper();
+
+        try {
+
+            rs = ps.executeQuery();
+            Step step;
+            Day day;
+            int userId;
+
+            GlistStep = new ArrayList<>();
+            HashMap<Integer, Step> integerStepHashMap = new HashMap<>();
+
+            // Get all steps from database
+            while (rs.next()) {
+
+                // init helper
+                helper.init(rs);
+
+                // set objects values
+                step = new Step();
+                userId = rs.getInt("userId");
+                step.setUserId(userId);
+                day = new Day();
+                day.setDate(rs.getDate("hour").toString());
+
+                // check if object already exists
+                if(integerStepHashMap.get(userId) != null) {
+                    step = integerStepHashMap.get(userId);
+                }
+
+                // add steps to specific date, specific
+                step.getDay(day).addStepsToList(rs.getInt("steps"), helper.getHourFromDate());
+                integerStepHashMap.put(userId,step);
+
+            }
+            // put all values from hashmap into list
+            GlistStep = new ArrayList<>(integerStepHashMap.values());
+
+            // Close statement
+            ps.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new CustomException(e.getMessage(), 500);
+        } finally {
+            Database.close(connection);
+        }
+
+
+
+    }
+
+    private void psStep(Step step) throws CustomException {
+
+        try {
+            for (int i = 0; i <step.getDayList().size() ; i++) {
+                if(step.getDayList().get(i) != null) {
+                    // Put step data in Prepared statement
+                    ps.setInt(1, step.getUserId());
+                    ps.setDate(2, step.get);
+                }
+            }
+            // Put user data in Prepared statement
+            ps.setInt(1, step.getUserId());
+            ps.setString(2, user.getLastname());
+            ps.setString(3, user.getEmail());
+            ps.setString(4, user.getPassword());
+            ps.setLong(5, user.getCountry());
+            ps.setLong(6, user.getWeight());
+            ps.setLong(7, user.getHeight());
+
+            // If update user is called, get the id from model
+            // If is not set, insert new user was called (ID AUTO_INCREMENT)
+            if (user.getId() != null) {
+                ps.setLong(8, user.getId());
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new CustomException("null fields?", 500);
+        }
 
 
     }
