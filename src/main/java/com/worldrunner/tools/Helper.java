@@ -24,10 +24,12 @@ public class Helper {
         cal.setTime(timestamp);
     }
 
-
     public int getStepDay() throws SQLException {
         return cal.get(Calendar.DAY_OF_MONTH);
     }
 
+    public int getHourFromDate() {
+        return cal.get(Calendar.HOUR_OF_DAY);
+    }
 
 }
