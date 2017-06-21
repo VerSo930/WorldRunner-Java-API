@@ -10,6 +10,7 @@ import com.worldrunner.tools.CustomException;
 import com.worldrunner.tools.Database;
 
 import javax.annotation.security.PermitAll;
+import javax.jws.WebService;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Request;
@@ -22,6 +23,7 @@ import java.util.Date;
 /**
  * Created by vuta on 15/06/2017.
  */
+
 @ApplicationPath(Cnst.API_URL)
 @Path(Cnst.API_URL)
 public class StepsService {
@@ -36,6 +38,29 @@ public class StepsService {
     public Response test(@Context Request req) {
         testFnc();
         rb = Response.ok("ok");
+        return rb.status(200).build();
+    }
+
+    @PermitAll
+    @POST
+    @Path(Cnst.ENDPOINT_STEPS)
+    @Produces(Cnst.CONTENT_TYPE)
+    @Consumes(Cnst.CONTENT_TYPE)
+    public Response insertStep(@Context Request req, Step step) {
+        StepDaoImpl dao = new StepDaoImpl();
+        MyResponse<Step> myResponse = new MyResponse<>();
+        try {
+            myResponse.setCode(200);
+            myResponse.setMessage("OK");
+            myResponse.setData(dao.insertStep(step));
+
+        } catch (Exception e) {
+            myResponse.setCode(500);
+            e.printStackTrace();
+            myResponse.setMessage(e.getMessage());
+        }
+
+        rb = Response.ok(myResponse);
         return rb.status(200).build();
     }
 
