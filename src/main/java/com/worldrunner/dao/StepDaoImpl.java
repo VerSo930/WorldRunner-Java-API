@@ -9,6 +9,7 @@ import com.worldrunner.tools.Database;
 import com.worldrunner.tools.Helper;
 
 import java.sql.*;
+import java.sql.Date;
 import java.util.*;
 
 /**
@@ -87,15 +88,17 @@ public class StepDaoImpl implements StepDao {
     }
 
     @Override
-    public User insertStep(Step step) throws Exception {
+    public Step insertStep(Step step) throws Exception {
+        connection = Database.getConnection();
         connection.setAutoCommit(false);
         ps = connection.prepareStatement("START TRANSACTION;");
-        ps.executeUpdate();
-
+        psStep(step);
+        ps.getConnection().close();
+        return step;
     }
 
     @Override
-    public User updateStep(Step step) throws Exception {
+    public Step updateStep(Step step) throws Exception {
         return null;
     }
 
@@ -201,16 +204,54 @@ public class StepDaoImpl implements StepDao {
 
     }
 
-    private void psStep(Step step) throws CustomException {
+    private void psStep(Step step) throws Exception {
+        Helper helper = new Helper();
+        int rowsAffected;
+        int j = 0;
+        int k = 0;
 
-        try {
-            for (int i = 0; i <step.getDayList().size() ; i++) {
-                if(step.getDayList().get(i) != null) {
+       for (Day d: step.getDayList() ) {
+            for (int i = 0; i < d.getListSteps().size() ; i++) {
+                if(d.getListSteps().get(i) != null) {
+                    ps = connection.prepareStatement("INSERT INTO step (userId, hour, steps) VALUES (?,?,?)", Statement.RETURN_GENERATED_KEYS);
+
+                    // Configure calendar
+                    helper.init(d.getDate());
+                    helper.getCalendar().set(Calendar.HOUR_OF_DAY, i);
+
                     // Put step data in Prepared statement
-                    ps.setInt(1, step.getUserId());
-                    ps.setDate(2, step.get);
+                    ps.setInt(1,step.getUserId());
+                    ps.setTimestamp(2, new java.sql.Timestamp(helper.getCalendar().getTimeInMillis()));
+                    ps.setInt(3, d.getListSteps().get(i));
+
+                    rowsAffected = ps.executeUpdate();
+                    j++;
+                    if(rowsAffected == 1) {
+                        k++;
+                    }
+                    System.out.println("Insert FOR " +i);
                 }
             }
+        }
+        if(j == k) {
+           ps.getConnection().commit();
+           System.out.println("Insert OK");
+        } else {
+           ps.getConnection().rollback();
+            System.out.println("Insert FAIL");
+        }
+        /*
+
+
+            for (int i = 0; i <step.getDayList().size() ; i++) {
+                if(step.getDayList().get(i) != null) {
+                    // Configure calendar
+                    cal.set(Calendar.Year);
+                    // Put step data in Prepared statement
+                    ps.setDate(3, new Date(helper.getCalendar().getTimeInMillis()));
+                }
+            }
+
             // Put user data in Prepared statement
             ps.setInt(1, step.getUserId());
             ps.setString(2, user.getLastname());
@@ -226,10 +267,9 @@ public class StepDaoImpl implements StepDao {
                 ps.setLong(8, user.getId());
             }
 
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new CustomException("null fields?", 500);
-        }
+            ps.executeUpdate();
+*/
+
 
 
     }
