@@ -3,6 +3,8 @@ package com.worldrunner.tools;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -14,6 +16,16 @@ public class Helper {
 
     // private static SimpleDateFormat formatter=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     private static GregorianCalendar cal;
+
+    public void init(String date) {
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        Calendar cal  = Calendar.getInstance();
+        try {
+            cal.setTime(df.parse(date));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+    }
 
     public Helper() {
         cal = new GregorianCalendar();
@@ -29,5 +41,9 @@ public class Helper {
         return cal.get(Calendar.DAY_OF_MONTH);
     }
 
+
+    public GregorianCalendar getCalendar(){
+        return cal;
+    }
 
 }

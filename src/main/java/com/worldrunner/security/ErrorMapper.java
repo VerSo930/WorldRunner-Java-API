@@ -6,10 +6,11 @@ import org.codehaus.jackson.map.exc.UnrecognizedPropertyException;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
-
-/**
+/*
+*
  * Created by vuta on 15/06/2017.
  */
+
 @Provider
 public class ErrorMapper  implements ExceptionMapper<UnrecognizedPropertyException>
 {

@@ -10,9 +10,10 @@ import javax.ws.rs.ext.Provider;
 /**
  * Created by vuta on 15/06/2017.
  */
+
 @Provider
 public class ErrorNotFound implements ExceptionMapper<NotFoundException> {
-
+    @Override
     public Response toResponse(NotFoundException exception){
         MyResponse<String>  response = new MyResponse<String>();
         response.setCode(404);

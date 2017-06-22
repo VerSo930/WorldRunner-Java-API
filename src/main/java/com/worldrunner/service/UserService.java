@@ -6,7 +6,6 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
-
 import com.sun.istack.NotNull;
 import com.worldrunner.Cnst;
 import com.worldrunner.dao.UserDaoImpl;

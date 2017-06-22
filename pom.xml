@@ -21,25 +21,13 @@
         <dependency>
             <groupId>org.jboss.resteasy</groupId>
             <artifactId>resteasy-jaxrs</artifactId>
-            <version>3.0.4.Final</version>
+            <version>2.3.1.GA</version>
         </dependency>
-        <dependency>
-            <groupId>org.jboss.resteasy</groupId>
-            <artifactId>resteasy-jackson-provider</artifactId>
-            <version>3.0.4.Final</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.glassfish.jersey.media</groupId>
-            <artifactId>jersey-media-json-jackson</artifactId>
-
-        </dependency>
-
         <!-- JAXB support -->
         <dependency>
             <groupId>org.jboss.resteasy</groupId>
             <artifactId>resteasy-jaxb-provider</artifactId>
-            <version>3.0.16.Final</version>
+            <version>2.3.1.GA</version>
         </dependency>
         <dependency>
             <groupId>net.sf.scannotation</groupId>
@@ -73,6 +61,12 @@
             <version>8.5.14</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.glassfish.jersey.containers</groupId>
+            <artifactId>jersey-container-servlet</artifactId>
+            <version>2.23.2</version>
+        </dependency>
+
     </dependencies>
     <build>
         <finalName>WorldRunner</finalName>
@@ -104,11 +98,11 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <source>1.7</source>
-                    <target>1.7</target>
+                    <source>1.8</source>
+                    <target>1.8</target>
                 </configuration>
             </plugin>
         </plugins>
     </build>
-    
+
 </project>
