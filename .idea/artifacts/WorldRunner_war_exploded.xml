@@ -1,10 +1,10 @@
 <component name="ArtifactManager">
-  <artifact type="exploded-war" name="RestApi:war exploded">
+  <artifact type="exploded-war" name="WorldRunner:war exploded">
     <output-path>$PROJECT_DIR$/target/WorldRunner</output-path>
     <root id="root">
       <element id="directory" name="WEB-INF">
         <element id="directory" name="classes">
-          <element id="module-output" name="RestApi" />
+          <element id="module-output" name="WorldRunner" />
         </element>
         <element id="directory" name="lib">
           <element id="library" level="project" name="Maven: org.jboss.resteasy:resteasy-jaxrs:2.3.1.GA" />
@@ -61,7 +61,7 @@
       <element id="directory" name="META-INF">
         <element id="file-copy" path="$PROJECT_DIR$/target/WorldRunner/META-INF/MANIFEST.MF" />
       </element>
-      <element id="javaee-facet-resources" facet="RestApi/web/Web" />
+      <element id="javaee-facet-resources" facet="WorldRunner/web/Web" />
     </root>
   </artifact>
 </component>

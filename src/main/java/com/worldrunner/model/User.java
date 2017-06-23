@@ -4,7 +4,6 @@ import com.worldrunner.model.step.Day;
 import com.worldrunner.model.step.Step;
 import jdk.nashorn.internal.objects.annotations.Getter;
 import jdk.nashorn.internal.objects.annotations.Setter;
-import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -19,7 +18,7 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
-@JsonSerialize(include=JsonSerialize.Inclusion.NON_NULL)
+
 public class User implements Serializable  {
     private static final long serialVersionUID = 1L;
     private Integer id;

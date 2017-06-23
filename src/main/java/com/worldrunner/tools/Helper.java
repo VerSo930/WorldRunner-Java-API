@@ -15,11 +15,12 @@ import java.util.GregorianCalendar;
 public class Helper {
 
     // private static SimpleDateFormat formatter=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+    DateFormat dtf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     private static GregorianCalendar cal;
 
     public void init(String date) {
-        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-        Calendar cal  = Calendar.getInstance();
+
         try {
             cal.setTime(df.parse(date));
         } catch (ParseException e) {
@@ -36,14 +37,21 @@ public class Helper {
         cal.setTime(timestamp);
     }
 
+    public String getDate(){
+        return df.format(cal.getTime());
+    }
 
-    public int getStepDay() throws SQLException {
-        return cal.get(Calendar.DAY_OF_MONTH);
+    public String getDateTime() {
+        return dtf.format(cal.getTime());
     }
 
 
     public GregorianCalendar getCalendar(){
         return cal;
+    }
+
+    public int getHourFromDate() {
+        return cal.get(Calendar.HOUR_OF_DAY);
     }
 
 }

@@ -2,7 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/RestApi.iml" filepath="$PROJECT_DIR$/RestApi.iml" />
+      <module fileurl="file://C:\Users\vuta\IdeaProjects\WorldRunner-Java-API\RestApi.iml" filepath="C:\Users\vuta\IdeaProjects\WorldRunner-Java-API\RestApi.iml" />
+      <module fileurl="file://$PROJECT_DIR$/WorldRunner.iml" filepath="$PROJECT_DIR$/WorldRunner.iml" />
     </modules>
   </component>
 </project>

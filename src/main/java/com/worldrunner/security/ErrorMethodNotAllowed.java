@@ -2,7 +2,6 @@
 package com.worldrunner.security;
 
 import com.worldrunner.model.MyResponse;
-import org.apache.http.MethodNotSupportedException;
 
 import javax.ws.rs.NotAllowedException;
 import javax.ws.rs.NotFoundException;

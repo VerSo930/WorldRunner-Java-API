@@ -1,10 +1,8 @@
 package com.worldrunner.dao;
 
-import com.worldrunner.model.step.Day;
 import com.worldrunner.model.step.Step;
 import com.worldrunner.model.User;
 
-import java.sql.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -13,9 +11,10 @@ import java.util.List;
  */
 public interface StepDao {
 
-    HashMap<User, HashMap<Integer, List<Integer>>> findById(int id, int page, int limit) throws  Exception;
+    Step findById(int id, int page, int limit) throws  Exception;
+    List<Step> findAll(int page, int limit) throws  Exception;
     List<Step> findByDate(String datetime, int page, int limit) throws  Exception;
-    User insertStep(Step step) throws Exception;
-    User updateStep(Step step) throws  Exception;
+    Step insertStep(Step step) throws Exception;
+    Step updateStep(Step step) throws  Exception;
     void deleteStep(Step step) throws  Exception;
 }

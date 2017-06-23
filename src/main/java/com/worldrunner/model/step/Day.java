@@ -1,23 +1,30 @@
 package com.worldrunner.model.step;
 
-import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Vuta Alexandru on 6/18/2017.
+ * Created by vuta on 19/06/2017.
  */
+
 public class Day {
 
     private String date;
-    private List<Integer> listSteps= new ArrayList<>();
+    private List<Integer> listSteps;
 
     public Day() {
-
+        listSteps = new ArrayList<>();
+        for (int i = 0; i < 24; i++) {
+            listSteps.add(i, null);
+        }
     }
 
     public List<Integer> getListSteps() {
         return listSteps;
+    }
+
+    public void addStepsToList(int numberOfSteps, int hourIndex) {
+        listSteps.set(hourIndex, numberOfSteps);
     }
 
     public void setListSteps(List<Integer> listSteps) {

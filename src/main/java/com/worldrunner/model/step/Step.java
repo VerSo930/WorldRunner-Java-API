@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Step {
-    private static final long serialVersionUID = 2L;
 
     private int userId;
     private List<Day> dayList;
@@ -29,9 +28,9 @@ public class Step {
                 }
             }
         }
-            if(!found){
-                dayList.add(day);
-            }
+        if(!found){
+            dayList.add(day);
+        }
 
         return day;
     }
@@ -50,7 +49,3 @@ public class Step {
 
 
 }
-
-
-
-

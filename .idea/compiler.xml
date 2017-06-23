@@ -7,10 +7,12 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="RestApi" />
+        <module name="WorldRunner" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="RestApi" target="1.8" />
+      <module name="WorldRunner" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>

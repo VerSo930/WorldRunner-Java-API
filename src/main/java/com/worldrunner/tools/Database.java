@@ -5,13 +5,11 @@ package com.worldrunner.tools;
  */
 import javax.naming.Context;
 import javax.naming.InitialContext;
-import javax.servlet.ServletContextEvent;
-import javax.servlet.ServletContextListener;
 import javax.sql.DataSource;
 import java.sql.*;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
+
 
 public class Database  {
 
@@ -23,7 +21,6 @@ public class Database  {
                Context initContext = new InitialContext();
                Context envContext  = (Context)initContext.lookup("java:/comp/env");
                DataSource datasource = (DataSource)envContext.lookup("jdbc/LocalTestDB");
-
                conn = datasource.getConnection();
 
            } catch (Exception e) {
@@ -45,6 +42,5 @@ public class Database  {
             e.printStackTrace();
         }
     }
-
 
 }
