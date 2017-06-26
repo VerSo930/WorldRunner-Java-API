@@ -1,5 +1,6 @@
 package com.worldrunner.model;
 
+import com.worldrunner.model.Authentication.Session;
 import com.worldrunner.model.step.Day;
 import com.worldrunner.model.step.Step;
 import jdk.nashorn.internal.objects.annotations.Getter;
@@ -31,12 +32,14 @@ public class User implements Serializable  {
     private Long weight;
     private String createdat;
 
-
     public User() {
         this.weight = 0L;
         this.height = 0L;
     }
-
+    public User(String email, String password){
+        this.email = email;
+        this.password=password;
+    }
 
     public String getCreatedat() {
         return createdat;
@@ -110,10 +113,10 @@ public class User implements Serializable  {
         this.weight = weight;
     }
 
-   /* @Override
+    @Override
     public String toString() {
         return this.id +" : "+ this.firstname + " / " + this.lastname + " / " + this.email + " / " + this.password;
-    }*/
+    }
 
     @Override
     public boolean equals(Object o) {

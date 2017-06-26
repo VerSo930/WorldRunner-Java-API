@@ -1,5 +1,7 @@
 package com.worldrunner.model;
 
+import com.google.gson.Gson;
+
 /**
  * Created by vuta on 09/06/2017.
  */
@@ -24,6 +26,11 @@ public class MyResponse<T> {
 
     public T getData() {
         return data;
+    }
+    public String  toJson(){
+        Gson gson = new Gson();
+        return gson.toJson(this);
+
     }
 
     public void setData(T data) {
@@ -52,6 +59,7 @@ public class MyResponse<T> {
 
     public void setError(int error) {
         this.error = error;
+
     }
 
 

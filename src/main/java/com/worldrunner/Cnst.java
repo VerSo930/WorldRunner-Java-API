@@ -30,6 +30,10 @@ public class Cnst {
     public static final int C_CREATED = 201;
     public static final int C_ERROR = 500;
 
+    // Authentication Query's
+    public static final String SQL_CREATE_SESSION= "INSERT INTO session (userId, sessionId, lastActivity) VALUES (?,?,?) ON DUPLICATE KEY UPDATE lastActivity = ?";
+    public static final String SQL_AUTHENTICATION_CHECK_USER= "SELECT u.*, s.sessionId, s.lastActivity FROM user u LEFT JOIN session s ON u.id = s.userId WHERE email = ? AND password = ? ";
+
     // User Mysql Query's
     public static final String SQL_INSERT_USER = "INSERT INTO user (firstName, lastName, email, password, country, weight, height) VALUE (?, ?, ?, ?, ?, ?, ?)";
     public static final String SQL_UPDATE_USER = "UPDATE user SET firstName = ?, lastName = ?, email = ?, password = ?, country = ?, weight = ?, height = ? WHERE id = ?";

@@ -33,7 +33,7 @@ public class StepsService {
     @GET
     @Path("/test")
     public Response test(@Context Request req) {
-        testFnc();
+        //testFnc();
         rb = Response.ok("ok");
         return rb.status(200).build();
     }

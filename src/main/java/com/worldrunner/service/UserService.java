@@ -2,6 +2,7 @@ package com.worldrunner.service;
 
 import javax.annotation.security.PermitAll;
 
+import javax.annotation.security.RolesAllowed;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Request;
@@ -18,6 +19,8 @@ import java.util.List;
 
 
 @Path(Cnst.API_URL)
+@Produces(Cnst.CONTENT_TYPE)
+@Consumes(Cnst.CONTENT_TYPE)
 public class UserService {
 
     private Response.ResponseBuilder rb;
@@ -26,7 +29,7 @@ public class UserService {
     @PermitAll
     @GET
     @Path(Cnst.ENDPOINT_USERS + "/{id}")
-    @Produces(Cnst.CONTENT_TYPE)
+
     public Response getUserById(@PathParam("id") int id, @Context Request req) {
 
         MyResponse<User> resp = new MyResponse<>();
@@ -55,10 +58,9 @@ public class UserService {
     }
 
 
-    @PermitAll
+    @RolesAllowed("ADMIN")
     @GET
     @Path(Cnst.ENDPOINT_USERS)
-    @Produces(Cnst.CONTENT_TYPE)
     public Response getAllUsers(@Context Request req) throws Exception {
 
         MyResponse<List<User>> resp = new MyResponse<>();
@@ -90,8 +92,6 @@ public class UserService {
     @PermitAll
     @POST
     @Path(Cnst.ENDPOINT_USERS)
-    @Produces(Cnst.CONTENT_TYPE)
-    @Consumes(Cnst.CONTENT_TYPE)
     public Response insertUser(User user) throws Exception {
 
         MyResponse<User> resp = new MyResponse<>();
@@ -125,8 +125,6 @@ public class UserService {
     @PermitAll
     @PUT
     @Path(Cnst.ENDPOINT_USERS)
-    @Produces(Cnst.CONTENT_TYPE)
-    @Consumes(Cnst.CONTENT_TYPE)
     public Response updateUserById(@NotNull User user) {
 
         MyResponse<User> resp = new MyResponse<>();
@@ -160,8 +158,6 @@ public class UserService {
     @PermitAll
     @DELETE
     @Path(Cnst.ENDPOINT_USERS)
-    @Produces(Cnst.CONTENT_TYPE)
-    @Consumes(Cnst.CONTENT_TYPE)
     public Response deleteUser(@NotNull User user) {
 
         MyResponse<User> resp = new MyResponse<>();
