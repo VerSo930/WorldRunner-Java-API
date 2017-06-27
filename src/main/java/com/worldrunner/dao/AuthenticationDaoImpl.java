@@ -18,8 +18,7 @@ public class AuthenticationDaoImpl implements AuthenticationDao {
     private static Connection connection;
     private PreparedStatement ps;
     private ResultSet rs;
-    private UserDao userDao;
-    private Session GSession;
+    private User GUser;
     private Helper helper;
 
     public AuthenticationDaoImpl() {
@@ -28,52 +27,8 @@ public class AuthenticationDaoImpl implements AuthenticationDao {
     }
 
     @Override
-    public Session authenticate(final User user) throws CustomException {
-        GSession = new Session();
-        try {
-            connection = Database.getConnection();
-            // prepare  statement
-            ps = connection.prepareStatement(Cnst.SQL_AUTHENTICATION_CHECK_USER);
-            ps.setString(1, user.getEmail());
-            ps.setString(2, user.getPassword());
-            rs = ps.executeQuery();
-            ps.close();
-
-            // Check user and password in database,
-            // if exists we will continue with session, if not throw exception
-            if(rs.next()){
-                // assign user values
-                user.setId(rs.getInt("id"));
-                user.setFirstname(rs.getString("firstName"));
-                user.setLastname(rs.getString("lastName"));
-                user.setEmail(rs.getString("email"));
-                user.setPassword(rs.getString("password"));
-                user.setWeight(rs.getLong("weight"));
-                user.setHeight(rs.getLong("height"));
-                user.setCountry(rs.getLong("country"));
-                user.setCreatedat(helper.formatTimestamp(rs.getTimestamp("createdat")));
-                GSession.setUserId(user.getId());
-
-                // If session exists we will fire an update, if not insert new session
-                if(rs.getString("sessionId") != null){
-                    GSession.setSession(rs.getString("sessionId"));
-                    GSession.setLastActivity(rs.getString("lastActivity"));
-                } else {
-                    GSession.setSession(helper.generateSessionId());
-                    //GSession.setLastActivity(helper.getDateFromTimestamp(System.currentTimeMillis()));
-                }
-                createSession();
-            } else {
-                throw new CustomException("wrong username or password", 500);
-            }
-        } catch(Exception e) {
-            e.printStackTrace();
-            throw new CustomException(e.getMessage(), 500);
-        } finally {
-            Database.close(connection);
-        }
-
-        return GSession;
+    public User authenticate(final User user) throws CustomException {
+return  null;
     }
 
     @Override
@@ -91,6 +46,7 @@ public class AuthenticationDaoImpl implements AuthenticationDao {
         return false;
     }
 
+/*
     private void createSession() throws CustomException {
 
         long ts = System.currentTimeMillis();
@@ -113,5 +69,5 @@ public class AuthenticationDaoImpl implements AuthenticationDao {
             e.printStackTrace();
             throw new CustomException("Failed to create or update client session", 500);
         }
-    }
+    }*/
 }

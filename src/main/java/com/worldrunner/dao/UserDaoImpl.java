@@ -8,6 +8,7 @@ import com.worldrunner.Cnst;
 import com.worldrunner.tools.CustomException;
 import com.worldrunner.tools.Database;
 import com.worldrunner.model.User;
+import com.worldrunner.tools.Helper;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -43,6 +44,44 @@ public class UserDaoImpl implements UserDao {
         }
 
         return users;
+    }
+
+    @Override
+    public User checkUserCredentials(User user) throws Exception {
+        try {
+            connection = Database.getConnection();
+            // prepare  statement
+            ps = connection.prepareStatement(Cnst.SQL_AUTHENTICATION_CHECK_USER);
+            ps.setString(1, user.getEmail());
+            ps.setString(2, user.getPassword());
+            ResultSet rs = ps.executeQuery();
+            ps.close();
+
+            // Check user and password in database,
+            // if exists we will continue with session, if not throw exception
+            if(rs.next()){
+                // assign user values
+                user.setId(rs.getInt("id"));
+                user.setFirstname(rs.getString("firstName"));
+                user.setLastname(rs.getString("lastName"));
+                user.setEmail(rs.getString("email"));
+                user.setPassword(rs.getString("password"));
+                user.setWeight(rs.getLong("weight"));
+                user.setHeight(rs.getLong("height"));
+                user.setCountry(rs.getLong("country"));
+                user.setCreatedat(Helper.formatTimestamp(rs.getTimestamp("createdat")));
+
+            } else {
+                throw new CustomException("wrong username or password", 500);
+            }
+        } catch(Exception e) {
+            e.printStackTrace();
+            throw new CustomException(e.getMessage(), 500);
+        } finally {
+            Database.close(connection);
+        }
+
+        return user;
     }
 
     @Override

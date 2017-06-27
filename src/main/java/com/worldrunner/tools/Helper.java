@@ -22,8 +22,8 @@ import java.util.UUID;
 public class Helper {
 
     // private static SimpleDateFormat formatter=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-    private DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-    private DateFormat dtf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    private static  DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+    private static DateFormat dtf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     private static GregorianCalendar cal;
 
     public void initCalendar(String date) {
@@ -68,7 +68,7 @@ public class Helper {
         return dtf.format(timestamp);
     }
 
-    public String formatTimestamp(Timestamp timestamp){
+    public static String formatTimestamp(Timestamp timestamp){
         return dtf.format(timestamp);
     }
 

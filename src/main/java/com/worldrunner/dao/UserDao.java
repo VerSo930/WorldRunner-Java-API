@@ -12,8 +12,9 @@ import java.util.List;
 public interface UserDao {
 
     List<User> findAll() throws  Exception;
+    User checkUserCredentials(User user) throws Exception;
     User findById(Long id) throws  Exception;
-    User insertUser(User employee) throws Exception;
-    User updateUser(User employee) throws  Exception;
-    void deleteUser(User employee) throws  Exception;
+    User insertUser(User user) throws Exception;
+    User updateUser(User user  ) throws  Exception;
+    void deleteUser(User user) throws  Exception;
 }

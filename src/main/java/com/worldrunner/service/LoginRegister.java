@@ -9,6 +9,7 @@ import com.worldrunner.model.MyResponse;
 import com.worldrunner.model.User;
 import com.worldrunner.tools.CustomException;
 import com.worldrunner.tools.Helper;
+import com.worldrunner.tools.ServiceTools;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.impl.TextCodec;
@@ -34,29 +35,59 @@ import java.util.StringTokenizer;
 @Produces(Cnst.CONTENT_TYPE)
 @Consumes(Cnst.CONTENT_TYPE)
 public class LoginRegister {
-    Response.ResponseBuilder rb;
-    AuthenticationDaoImpl dao;
 
+    private Response.ResponseBuilder rb;
+    private MyResponse<User> response;
+    private UserDaoImpl dao;
 
     @PermitAll
     @POST
     @Path("/authorization/login")
 
     public Response login(@HeaderParam("Authorization") String authorization) {
-        MyResponse<Session> response;
-        dao = new AuthenticationDaoImpl();
+        dao = new UserDaoImpl();
         String[] usernameAndPassword = parseHeaderToken(authorization);
-        System.out.println(usernameAndPassword[0]);
-        System.out.println(usernameAndPassword[1]);
+        Session session = new Session();
 
         try {
-            Session session = dao.authenticate(new User(usernameAndPassword[0], Helper.cryptPassword(usernameAndPassword[1])));
-            session.setToken(generateJWT(session.getUserId(),session.getSession()));
-
+            User user = dao.checkUserCredentials(new User(usernameAndPassword[0], Helper.cryptPassword(usernameAndPassword[1])));
+            session.setToken(generateJWT(user.getId()));
+            session.setUserId(user.getId());
             response = new MyResponse<>(Cnst.SUCCESS, 0, 200,"authentication successfully", session);
 
-        } catch (CustomException e) {
+        } catch (Exception e) {
             response = new MyResponse<>(Cnst.FAIL, 2500, 401,e.getMessage(),null);
+        }
+
+        // build response
+        rb = Response.ok(response);
+        return rb.status(200).build();
+    }
+    @PermitAll
+    @POST
+    @Path("/authorization/register")
+
+    public Response register(User user) {
+        MyResponse<User> response = new MyResponse<>();
+
+        try {
+
+            // Check for empty & null params
+            ServiceTools.checkUser(user);
+            // Create DAO, get user by id, create response Object
+            dao = new UserDaoImpl();
+            response.setData(dao.insertUser(user));
+            response.setCode(Cnst.C_REQ_OK);
+            response.setMessage(Cnst.MSG_FIND_ALL);
+            response.setStatus(Cnst.SUCCESS);
+
+        } catch (Exception e) {
+
+            // Catch error, display error code and message from Exception
+            resp.setCode(Cnst.C_ERROR);
+            resp.setMessage(e.getMessage());
+            resp.setStatus(Cnst.FAIL);
+            resp.setError(2500);
         }
 
         // build response
@@ -113,13 +144,12 @@ public class LoginRegister {
 
     }
 
-    private String generateJWT(int userId, String userEmail) {
+    private String generateJWT(int userId) {
         Date date = new Date(System.currentTimeMillis());
         return Jwts.builder()
                 .setIssuer("WorldRunner API")
                 .setSubject("Token")
                 .claim("userId", userId)
-                .claim("userEmail", userEmail)
                 .claim("iat", date)
                 .claim("exp", Helper.addMinutesToCurrentDate(Cnst.JWT_EXPIRATION_TIME))
                 .signWith(
