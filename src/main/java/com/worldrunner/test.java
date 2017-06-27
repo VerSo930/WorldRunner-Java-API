@@ -12,6 +12,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.impl.TextCodec;
 import io.jsonwebtoken.impl.crypto.MacProvider;
 
+import javax.xml.bind.DatatypeConverter;
 import java.security.*;
 import java.sql.*;
 import java.sql.Timestamp;
@@ -42,14 +43,15 @@ static Connection connection;
 
         try {
             connection = DriverManager.getConnection("jdbc:mariadb://vuta-alexandru.com:3306/spring_test?user=spring_test&password=spring123");
-            insertStepRow(33, helper,50,true);
         } catch (Exception e) {
             e.printStackTrace();
         }
 
         AuthenticationDaoImpl dao = new AuthenticationDaoImpl();
 
-            createSession();
+            parseJWT("eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJUb2tlbiIsImlzcyI6IldvcmxkUnVubmVyIEFQSSIsInNlc3Npb25JZCI6InRlc3QxMjMiLCJpYXQiOjE0OTg1NTgyNzk2MjEsImV4cCI6MTQ5ODU2MTg3OTc4NX0.BpXT1SN6uh9tlZhMPZ8EhJz0mhWwNHYCSpSk_cP_ntY");
+            System.out.println(System.currentTimeMillis());
+            System.out.println(new Date(System.currentTimeMillis()).getTime());
 
 
 
@@ -94,49 +96,46 @@ static Connection connection;
 */
     }
 
-    private static void createSession()  {
-
-        try {
-
-
-        } catch(Exception e) {
-            e.printStackTrace();
-            //throw new CustomException(e.getMessage(), 500);
-        }
+    private static String generateJWT(String sessionId) {
+        Date date = new Date(System.currentTimeMillis());
+        return Jwts.builder()
+                .setIssuer("WorldRunner API")
+                .setSubject("Token")
+                .claim("sessionId", sessionId)
+                .claim("iat", date)
+                .claim("exp", helper.addMinutesToCurrentDate(Cnst.JWT_EXPIRATION_TIME))
+                .signWith(
+                        SignatureAlgorithm.HS256,
+                        TextCodec.BASE64.decode(Cnst.JWT_SECRET)
+                )
+                .compact();
+    }
+    private  String generateRefreshJWT(String sessionId) {
+        Date date = new Date(System.currentTimeMillis());
+        return Jwts.builder()
+                .setIssuer("WorldRunner API")
+                .setSubject("Token")
+                .claim("sessionId", sessionId)
+                .claim("iat", date)
+                .claim("exp", helper.addMinutesToCurrentDate(Cnst.JWT_EFRESH_EXPIRATION_TIME))
+                .signWith(
+                        SignatureAlgorithm.HS256,
+                        TextCodec.BASE64.decode(Cnst.JWT_SECRET)
+                )
+                .compact();
     }
 
-    private static boolean checkIfStepHourExist(String date) throws Exception {
+    //Sample method to validate and read the JWT
+    private static void parseJWT(String jwt) {
 
-        ps = connection.prepareStatement("SELECT id FROM step WHERE TIMESTAMP (hour) = ?", Statement.RETURN_GENERATED_KEYS);
-        ps.setString(1, date);
-        ResultSet rs = ps.executeQuery();
-
-        return rs.next();
+        //This line will throw an exception if it is not a signed JWS (as expected)
+        Claims claims = Jwts.parser()
+                .setSigningKey(DatatypeConverter.parseBase64Binary(Cnst.JWT_SECRET))
+                .parseClaimsJws(jwt).getBody();
+        System.out.println("ID: " + claims.getId());
+        System.out.println("Subject: " + claims.getSubject());
+        System.out.println("Issuer: " + claims.getIssuer());
+        System.out.println("Expiration: " + claims.getExpiration());
     }
-
-    private static boolean checkIfDateExist(String date) throws Exception {
-
-        ps = connection.prepareStatement("SELECT id FROM step WHERE DATE (hour) = ?", Statement.RETURN_GENERATED_KEYS);
-        ps.setString(1, date);
-        ResultSet rs = ps.executeQuery();
-
-        return rs.next();
-    }
-
-
-    public static boolean insertStepRow(int userId, Helper helper, int steps, boolean dateExist) throws Exception {
-
-        if (!checkIfStepHourExist(helper.getDateTime())) {
-            ps = connection.prepareStatement("INSERT INTO step (userId,steps, hour) VALUES (?,?,?)", Statement.RETURN_GENERATED_KEYS);
-        } else {
-            ps = connection.prepareStatement("UPDATE step SET userId = ?, steps = ? WHERE TIMESTAMP (hour) = ?", Statement.RETURN_GENERATED_KEYS);
-        }
-        ps.setInt(1, userId);
-        ps.setString(3, helper.getDateTime());
-        ps.setInt(2, steps);
-        return ps.executeUpdate() == 1;
-    }
-
-
 
 }

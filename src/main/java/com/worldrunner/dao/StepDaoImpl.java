@@ -136,7 +136,7 @@ public class StepDaoImpl implements StepDao {
                 }
 
                 // init helper
-                helper.init(rs);
+                helper.initCalendar(rs);
 
                 // set objects values
                 day = new Day();
@@ -178,7 +178,7 @@ public class StepDaoImpl implements StepDao {
             while (rs.next()) {
 
                 // init helper
-                helper.init(rs);
+                helper.initCalendar(rs);
 
                 // set objects values
                 step = new Step();
@@ -225,7 +225,7 @@ public class StepDaoImpl implements StepDao {
                 if (d.getListSteps().get(i) != null) {
 
                     // Configure calendar (date and hour for each row)
-                    helper.init(d.getDate());
+                    helper.initCalendar(d.getDate());
                     helper.getCalendar().set(Calendar.HOUR_OF_DAY, i);
                     helper.getCalendar().set(Calendar.MINUTE, 0);
                     helper.getCalendar().set(Calendar.SECOND, 0);

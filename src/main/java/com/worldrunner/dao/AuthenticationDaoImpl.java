@@ -28,7 +28,7 @@ public class AuthenticationDaoImpl implements AuthenticationDao {
     }
 
     @Override
-    public Object[] authenticate(final User user) throws CustomException {
+    public Session authenticate(final User user) throws CustomException {
         GSession = new Session();
         try {
             connection = Database.getConnection();
@@ -73,7 +73,7 @@ public class AuthenticationDaoImpl implements AuthenticationDao {
             Database.close(connection);
         }
 
-        return new Object[]{user, GSession};
+        return GSession;
     }
 
     @Override

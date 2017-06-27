@@ -9,7 +9,7 @@ import com.worldrunner.tools.CustomException;
  */
 public interface AuthenticationDao {
 
-    Object[] authenticate(User user) throws CustomException;
+    Session authenticate(User user) throws CustomException;
     Session register(User user);
     Session getSession(User user);
     boolean checkSession(User user);

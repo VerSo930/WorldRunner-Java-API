@@ -5,12 +5,26 @@ package com.worldrunner.model.Authentication;
  */
 public class Session {
 
-    private int id;
     private int userId;
-    private String session;
-    private String lastActivity;
+    private String token;
 
     public Session() {
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+
+    public String getRefreshToken() {
+        return refreshToken;
+    }
+
+    public void setRefreshToken(String refreshToken) {
+        this.refreshToken = refreshToken;
     }
 
     public String getLastActivity() {

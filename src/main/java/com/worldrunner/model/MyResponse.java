@@ -24,6 +24,14 @@ public class MyResponse<T> {
 
     public MyResponse() {}
 
+    public MyResponse(String status,int error, int code, String message,  T data) {
+        this.status = status;
+        this.message = message;
+        this.error = error;
+        this.data = data;
+        this.code = code;
+    }
+
     public T getData() {
         return data;
     }

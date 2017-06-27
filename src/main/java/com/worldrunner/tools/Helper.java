@@ -26,7 +26,7 @@ public class Helper {
     private DateFormat dtf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     private static GregorianCalendar cal;
 
-    public void init(String date) {
+    public void initCalendar(String date) {
 
         try {
             cal.setTime(df.parse(date));
@@ -39,9 +39,13 @@ public class Helper {
         cal = new GregorianCalendar();
     }
 
-    public void init(ResultSet rs) throws SQLException {
+    public void initCalendar(ResultSet rs) throws SQLException {
         Timestamp timestamp = rs.getTimestamp("hour");
         cal.setTime(timestamp);
+    }
+
+    public void initCalendar() {
+       cal =  new GregorianCalendar();
     }
 
     public String getDate(){
@@ -75,6 +79,13 @@ public class Helper {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public static Date addMinutesToCurrentDate (int minutes) {
+        final long ONE_MINUTE_IN_MILLIS = 60000;//millisecs
+
+        long curTimeInMs = new Date(System.currentTimeMillis()).getTime();
+        return new Date(curTimeInMs + (minutes * ONE_MINUTE_IN_MILLIS));
     }
 
     public static String cryptPassword(String pass) throws  CustomException{
