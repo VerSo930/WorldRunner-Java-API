@@ -114,7 +114,7 @@ public class Helper {
     }
 /**
     Here are some methods for login / register
-    like check if user exists, if is valid, create and update session creditals
+    like check if user exists, if is valid, create and update authentication creditals
 **/
     public boolean checkUserCredentials(final User user) {
 return false;

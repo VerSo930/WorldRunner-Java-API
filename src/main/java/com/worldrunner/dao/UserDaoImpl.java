@@ -25,7 +25,6 @@ public class UserDaoImpl implements UserDao {
 
     public UserDaoImpl() {
         users = new ArrayList<>();
-
     }
 
     @Override
@@ -58,7 +57,7 @@ public class UserDaoImpl implements UserDao {
             ps.close();
 
             // Check user and password in database,
-            // if exists we will continue with session, if not throw exception
+            // if exists we will continue with authentication, if not throw exception
             if(rs.next()){
                 // assign user values
                 user.setId(rs.getInt("id"));
@@ -70,6 +69,7 @@ public class UserDaoImpl implements UserDao {
                 user.setHeight(rs.getLong("height"));
                 user.setCountry(rs.getLong("country"));
                 user.setCreatedat(Helper.formatTimestamp(rs.getTimestamp("createdat")));
+                user.setRole(rs.getString("role"));
 
             } else {
                 throw new CustomException("wrong username or password", 500);

@@ -31,8 +31,8 @@ public class Cnst {
     public static final int C_ERROR = 500;
 
     // Authentication Query's
-    public static final String SQL_CREATE_SESSION= "INSERT INTO session (userId, sessionId, lastActivity) VALUES (?,?,?) ON DUPLICATE KEY UPDATE lastActivity = ?";
-    public static final String SQL_AUTHENTICATION_CHECK_USER= "SELECT u.*, s.sessionId, s.lastActivity FROM user u LEFT JOIN session s ON u.id = s.userId WHERE email = ? AND password = ? ";
+    public static final String SQL_CREATE_SESSION= "INSERT INTO authentication (userId, sessionId, lastActivity) VALUES (?,?,?) ON DUPLICATE KEY UPDATE lastActivity = ?";
+    public static final String SQL_AUTHENTICATION_CHECK_USER= "SELECT * FROM user WHERE email = ? AND password = ? ";
 
     // User Mysql Query's
     public static final String SQL_INSERT_USER = "INSERT INTO user (firstName, lastName, email, password, country, weight, height) VALUE (?, ?, ?, ?, ?, ?, ?)";
@@ -63,7 +63,6 @@ public class Cnst {
     // Authentication
     public static final String JWT_SECRET = "pCu/ghCamq9+wS/CG16JJ1NBqur2Ckzl522AA8xbhSQ=";
     public static final int JWT_EXPIRATION_TIME = 60;
-    public static final int JWT_EFRESH_EXPIRATION_TIME = 60*24;
 
 
 

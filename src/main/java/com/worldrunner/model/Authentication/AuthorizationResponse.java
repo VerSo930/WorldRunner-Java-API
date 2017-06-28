@@ -6,23 +6,23 @@ import com.worldrunner.model.User;
  * Created by vuta on 27/06/2017.
  */
 public class AuthorizationResponse {
-    public Session session;
+    public Authentication authentication;
     public User user;
 
     public AuthorizationResponse() {
     }
 
-    public AuthorizationResponse(Session session, User user) {
-        this.session = session;
+    public AuthorizationResponse(Authentication authentication, User user) {
+        this.authentication = authentication;
         this.user = user;
     }
 
-    public Session getSession() {
-        return session;
+    public Authentication getAuthentication() {
+        return authentication;
     }
 
-    public void setSession(Session session) {
-        this.session = session;
+    public void setAuthentication(Authentication authentication) {
+        this.authentication = authentication;
     }
 
     public User getUser() {

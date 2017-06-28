@@ -1,24 +1,15 @@
 package com.worldrunner;
 
 import com.worldrunner.dao.AuthenticationDaoImpl;
-import com.worldrunner.model.Authentication.Session;
 import com.worldrunner.model.User;
-import com.worldrunner.tools.CustomException;
 import com.worldrunner.tools.Helper;
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.impl.TextCodec;
-import io.jsonwebtoken.impl.crypto.MacProvider;
 
 import javax.xml.bind.DatatypeConverter;
-import java.security.*;
 import java.sql.*;
-import java.sql.Timestamp;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.*;
 import java.util.Date;
 
 /**
@@ -117,7 +108,7 @@ static Connection connection;
                 .setSubject("Token")
                 .claim("sessionId", sessionId)
                 .claim("iat", date)
-                .claim("exp", helper.addMinutesToCurrentDate(Cnst.JWT_EFRESH_EXPIRATION_TIME))
+                .claim("exp", Helper.addMinutesToCurrentDate(15))
                 .signWith(
                         SignatureAlgorithm.HS256,
                         TextCodec.BASE64.decode(Cnst.JWT_SECRET)

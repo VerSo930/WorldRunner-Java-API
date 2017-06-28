@@ -1,6 +1,6 @@
 package com.worldrunner.dao;
 
-import com.worldrunner.model.Authentication.Session;
+import com.worldrunner.model.Authentication.Authentication;
 import com.worldrunner.model.User;
 import com.worldrunner.tools.CustomException;
 
@@ -10,8 +10,8 @@ import com.worldrunner.tools.CustomException;
 public interface AuthenticationDao {
 
     User authenticate(User user) throws CustomException;
-    Session register(User user);
-    Session getSession(User user);
+    Authentication register(User user);
+    Authentication getSession(User user);
     boolean checkSession(User user);
 
 

@@ -1,23 +1,6 @@
 package com.worldrunner.model;
 
-import com.worldrunner.model.Authentication.Session;
-import com.worldrunner.model.step.Day;
-import com.worldrunner.model.step.Step;
-import jdk.nashorn.internal.objects.annotations.Getter;
-import jdk.nashorn.internal.objects.annotations.Setter;
-
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-
-import javax.ws.rs.Produces;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
 
 
 public class User implements Serializable  {
@@ -31,14 +14,25 @@ public class User implements Serializable  {
     private Long height;
     private Long weight;
     private String createdat;
+    private String role;
 
     public User() {
         this.weight = 0L;
         this.height = 0L;
+        this.role = "USER";
     }
     public User(String email, String password){
+        this();
         this.email = email;
         this.password=password;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 
     public String getCreatedat() {

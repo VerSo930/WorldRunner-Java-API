@@ -1,5 +1,6 @@
 package com.worldrunner.service;
 
+import javax.annotation.security.DeclareRoles;
 import javax.annotation.security.PermitAll;
 
 import javax.annotation.security.RolesAllowed;
@@ -26,7 +27,7 @@ public class UserService {
     private Response.ResponseBuilder rb;
     private UserDaoImpl dao;
 
-    @PermitAll
+    @RolesAllowed({"USER","ADMIN"})
     @GET
     @Path(Cnst.ENDPOINT_USERS + "/{id}")
 
@@ -58,7 +59,7 @@ public class UserService {
     }
 
 
-    @RolesAllowed("ADMIN")
+    @RolesAllowed({"USER","ADMIN"})
     @GET
     @Path(Cnst.ENDPOINT_USERS)
     public Response getAllUsers(@Context Request req) throws Exception {
@@ -89,7 +90,7 @@ public class UserService {
     }
 
 
-    @PermitAll
+    @RolesAllowed({"USER","ADMIN"})
     @POST
     @Path(Cnst.ENDPOINT_USERS)
     public Response insertUser(User user) throws Exception {
@@ -122,7 +123,7 @@ public class UserService {
     }
 
     // TODO: Method not working: write it?
-    @PermitAll
+    @RolesAllowed({"USER","ADMIN"})
     @PUT
     @Path(Cnst.ENDPOINT_USERS)
     public Response updateUserById(@NotNull User user) {
@@ -155,7 +156,7 @@ public class UserService {
     }
 
 
-    @PermitAll
+    @RolesAllowed("ADMIN")
     @DELETE
     @Path(Cnst.ENDPOINT_USERS)
     public Response deleteUser(@NotNull User user) {

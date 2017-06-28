@@ -5,26 +5,28 @@ import com.worldrunner.model.User;
 /**
  * Created by Vuta Alexandru on 6/24/2017.
  */
-public class Session {
+public class Authentication {
 
-    private int userId;
     private String token;
+    private User user;
 
-    public Session() {
+    public Authentication() {
     }
 
-    public Session(int userId, String token) {
-        this.userId = userId;
+    public Authentication( String token, User user) {
+
         this.token = token;
+        this.user = user;
     }
 
-    public int getUserId() {
-        return userId;
+    public User getUser() {
+        return user;
     }
 
-    public void setUserId(int userId) {
-        this.userId = userId;
+    public void setUser(User user) {
+        this.user = user;
     }
+
 
     public String getToken() {
         return token;

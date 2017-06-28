@@ -1,15 +1,11 @@
 package com.worldrunner.dao;
 
-import com.google.gson.Gson;
-import com.worldrunner.Cnst;
-import com.worldrunner.model.Authentication.Session;
+import com.worldrunner.model.Authentication.Authentication;
 import com.worldrunner.model.User;
 import com.worldrunner.tools.CustomException;
-import com.worldrunner.tools.Database;
 import com.worldrunner.tools.Helper;
 
 import java.sql.*;
-import java.util.Map;
 
 /**
  * Created by Vuta Alexandru on 6/24/2017.
@@ -22,7 +18,7 @@ public class AuthenticationDaoImpl implements AuthenticationDao {
     private Helper helper;
 
     public AuthenticationDaoImpl() {
-        //GSession = new Session();
+        //GSession = new Authentication();
         helper = new Helper();
     }
 
@@ -32,12 +28,12 @@ return  null;
     }
 
     @Override
-    public Session register(User user) {
+    public Authentication register(User user) {
         return null;
     }
 
     @Override
-    public Session getSession(User user) {
+    public Authentication getSession(User user) {
         return null;
     }
 
@@ -57,7 +53,7 @@ return  null;
 
             // set values for insert
             ps.setInt(1, GSession.getUserId());
-            ps.setString(2, GSession.getSession());
+            ps.setString(2, GSession.getAuthentication());
             ps.setTimestamp(3, new Timestamp(ts));
             ps.setTimestamp(4, new Timestamp(ts));
             ps.executeQuery();
@@ -67,7 +63,7 @@ return  null;
             ps.close();
         } catch(Exception e) {
             e.printStackTrace();
-            throw new CustomException("Failed to create or update client session", 500);
+            throw new CustomException("Failed to create or update client authentication", 500);
         }
     }*/
 }
