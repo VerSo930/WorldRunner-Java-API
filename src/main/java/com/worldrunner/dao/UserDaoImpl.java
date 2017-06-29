@@ -138,7 +138,7 @@ public class UserDaoImpl implements UserDao {
         return user;
     }
 
-    // TODO: Method update user is not ready yet!!
+
     @Override
     public User updateUser(User user) throws CustomException {
 
@@ -165,7 +165,6 @@ public class UserDaoImpl implements UserDao {
         return user;
     }
 
-    // TODO: Method delete user is not ready yet!!
     @Override
     public void deleteUser(User user) throws CustomException {
 

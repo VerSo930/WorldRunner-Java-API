@@ -32,6 +32,8 @@ static Connection connection;
 
 
 
+
+
         try {
             connection = DriverManager.getConnection("jdbc:mariadb://vuta-alexandru.com:3306/spring_test?user=spring_test&password=spring123");
         } catch (Exception e) {

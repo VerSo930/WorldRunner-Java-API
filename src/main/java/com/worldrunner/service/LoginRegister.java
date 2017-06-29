@@ -45,7 +45,7 @@ public class LoginRegister {
             String[] usernameAndPassword = parseHeaderToken(authorization);
             User user = dao.checkUserCredentials(new User(usernameAndPassword[0], Helper.cryptPassword(usernameAndPassword[1])));
             // generate authentication object (token and user)
-            authentication = new Authentication(Tokenizer.generateJWT(user.getId(), user.getRole()), user);
+            authentication = new Authentication(Tokenizer.generateJWT(user.getId(), user.getEmail(), user.getRole()), user);
             // set response data
             response = new MyResponse<>(Cnst.SUCCESS, 0, 200,"authentication successfully", authentication);
 
@@ -74,7 +74,7 @@ public class LoginRegister {
             dao = new UserDaoImpl();
             user = dao.insertUser(user);
             // Create authentication and generate TOKEN
-            authentication = new Authentication(Tokenizer.generateJWT(user.getId(), user.getRole()), user);
+            authentication = new Authentication(Tokenizer.generateJWT(user.getId(), user.getEmail(), user.getRole()), user);
             // Set response data to object
             response.setData(authentication);
             response.setCode(Cnst.C_REQ_OK);
@@ -97,7 +97,9 @@ public class LoginRegister {
 
 
     private String[] parseHeaderToken(String token) throws CustomException {
+
         try {
+
             String[] string = new String[2];
             String usernameAndPassword;
             token = token.replaceFirst("Basic" + " ", "");
@@ -110,6 +112,7 @@ public class LoginRegister {
             string[1] = tokenizer.nextToken();
 
             return string;
+
         } catch (Exception e) {
             throw new CustomException("Not allowed [ NO AUTH PROVIDED ]", 405);
         }

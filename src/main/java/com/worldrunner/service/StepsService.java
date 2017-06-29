@@ -8,6 +8,7 @@ import com.worldrunner.model.step.Step;
 import com.worldrunner.tools.CustomException;
 import com.worldrunner.tools.Database;
 import javax.annotation.security.PermitAll;
+import javax.annotation.security.RolesAllowed;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Request;
@@ -27,18 +28,9 @@ import java.util.Date;
 public class StepsService {
 
     private Response.ResponseBuilder rb;
-    private UserDaoImpl dao;
 
-    @PermitAll
-    @GET
-    @Path("/test")
-    public Response test(@Context Request req) {
-        //testFnc();
-        rb = Response.ok("ok");
-        return rb.status(200).build();
-    }
 
-    @PermitAll
+    @RolesAllowed({"USER","ADMIN"})
     @POST
     @Path(Cnst.ENDPOINT_STEPS)
     public Response insertStep(@Context Request req, Step step) {
@@ -59,7 +51,7 @@ public class StepsService {
         return rb.status(200).build();
     }
 
-    @PermitAll
+    @RolesAllowed({"USER","ADMIN"})
     @GET
     @Path(Cnst.ENDPOINT_STEPS+"/{id}")
     public Response getStepsById(@Context Request req, @PathParam("id") int id) {
@@ -81,7 +73,7 @@ public class StepsService {
         return rb.status(200).build();
     }
 
-    @PermitAll
+    @RolesAllowed({"USER","ADMIN"})
     @GET
     @Path(Cnst.ENDPOINT_STEPS)
     @Produces(Cnst.CONTENT_TYPE)
@@ -91,6 +83,7 @@ public class StepsService {
         //testFnc();
         StepDaoImpl dao = new StepDaoImpl();
         MyResponse<List<Step>> myResponse = new MyResponse<>();
+
         // build response
         try {
             myResponse.setCode(200);

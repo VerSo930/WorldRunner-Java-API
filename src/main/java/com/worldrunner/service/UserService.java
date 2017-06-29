@@ -1,13 +1,11 @@
 package com.worldrunner.service;
 
-import javax.annotation.security.DeclareRoles;
-import javax.annotation.security.PermitAll;
-
 import javax.annotation.security.RolesAllowed;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
+
 import com.sun.istack.NotNull;
 import com.worldrunner.Cnst;
 import com.worldrunner.dao.UserDaoImpl;
@@ -30,7 +28,6 @@ public class UserService {
     @RolesAllowed({"USER","ADMIN"})
     @GET
     @Path(Cnst.ENDPOINT_USERS + "/{id}")
-
     public Response getUserById(@PathParam("id") int id, @Context Request req) {
 
         MyResponse<User> resp = new MyResponse<>();

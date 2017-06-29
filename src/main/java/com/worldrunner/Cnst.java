@@ -62,7 +62,7 @@ public class Cnst {
 
     // Authentication
     public static final String JWT_SECRET = "pCu/ghCamq9+wS/CG16JJ1NBqur2Ckzl522AA8xbhSQ=";
-    public static final int JWT_EXPIRATION_TIME = 60;
+    public static final int JWT_EXPIRATION_TIME = 5;
 
 
 

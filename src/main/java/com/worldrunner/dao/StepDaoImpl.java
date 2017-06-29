@@ -132,8 +132,8 @@ public class StepDaoImpl implements StepDao {
             while (rs.next()) {
                 if (Gstep == null) {
                     Gstep = new Step();
-                    Gstep.setUserId(rs.getInt("userId"));
                 }
+                Gstep.setUserId(rs.getInt("userId"));
 
                 // init helper
                 helper.initCalendar(rs);
